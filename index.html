@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indigo Soul Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 30%, #581c87 60%, #0f766e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 550px;
+            width: 92%;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #a855f7, #3b82f6, #8b5cf6, #14b8a6, #ec4899);
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0.4;
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                opacity: 0.4;
+            }
+
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        .title {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: #e0e7ff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .main-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .main-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+        }
+
+        .main-button:active {
+            transform: translateY(0);
+        }
+
+        .insight {
+            margin: 25px 0;
+            color: #e0e7ff;
+            font-size: 1.25rem;
+            font-weight: 300;
+            line-height: 1.6;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            font-style: italic;
+            padding: 0 10px;
+        }
+
+        .insight.show {
+            opacity: 1;
+        }
+
+        .mood-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mood-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e7ff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 400;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+        }
+
+        .mood-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .mood-options {
+            display: none;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .mood-options.show {
+            display: flex;
+        }
+
+        .emoji-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 18px;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .mood-message {
+            color: #bfdbfe;
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.5;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mood-message.show {
+            opacity: 1;
+        }
+
+        /* Audio controls */
+        .audio-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            opacity: 0.8;
+        }
+
+        .audio-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e0e7ff;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .audio-btn.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .sound-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .sound-menu.show {
+            display: block;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .sound-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #e0e7ff;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .sound-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sound-option.active {
+            background: rgba(139, 92, 246, 0.3);
+            color: white;
+        }
+
+        .sound-emoji {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .volume-control {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .volume-label {
+            color: #e0e7ff;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Companion Chat Styles */
+        .companion-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chat-messages {
+            min-height: 150px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 85%;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.companion {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e7ff;
+            margin-right: auto;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e0e7ff;
+            padding: 12px 15px;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(224, 231, 255, 0.6);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .companion-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e7ff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: rgba(224, 231, 255, 0.7);
+            font-style: italic;
+            font-size: 0.85rem;
+            padding: 10px 15px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            background: rgba(224, 231, 255, 0.7);
+            border-radius: 50%;
+            animation: typingPulse 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingPulse {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .recommendation-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .recommendation-title {
+            font-weight: 500;
+            color: #a855f7;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-description {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: rgba(224, 231, 255, 0.7);
+        }
+
+        /* Soul Mirror Insight Engine Styles */
+        .insights-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .journal-container {
+            margin-bottom: 20px;
+        }
+
+        .journal-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: #e0e7ff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .journal-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+        }
+
+        .journal-input::placeholder {
+            color: rgba(224, 231, 255, 0.5);
+            font-style: italic;
+        }
+
+        .insight-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .insight-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .insight-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mirror-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mirror-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: rgba(224, 231, 255, 0.7);
+            font-style: italic;
+        }
+
+        .welcome-message p:first-child {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .insight-entry {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 3px solid #a855f7;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .insight-timestamp {
+            font-size: 0.8rem;
+            color: rgba(224, 231, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            color: #e0e7ff;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .insight-source {
+            font-size: 0.75rem;
+            color: rgba(168, 85, 247, 0.7);
+            text-align: right;
+        }
+
+        .loading-insight {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(224, 231, 255, 0.7);
+            font-style: italic;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .loading-dot {
+            width: 4px;
+            height: 4px;
+            background: rgba(168, 85, 247, 0.7);
+            border-radius: 50%;
+            animation: loadingPulse 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loadingPulse {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .connection-status {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .connection-status.online {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+
+        .connection-status.offline {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <!-- Audio controls -->
+        <div class="audio-controls">
+            <button class="audio-btn" onclick="toggleSoundMenu()" title="Ambient sounds" id="soundToggle">🎵</button>
+            <div class="sound-menu" id="soundMenu">
+                <div class="sound-option" onclick="selectSound('ocean')" data-sound="ocean">
+                    <span class="sound-emoji">🌊</span>
+                    <span>Ocean Waves</span>
+                </div>
+                <div class="sound-option" onclick="selectSound('meditation')" data-sound="meditation">
+                    <span class="sound-emoji">🧘</span>
+                    <span>Meditation Track</span>
+                </div>
+                <div class="sound-option" onclick="selectSound('binaural')" data-sound="binaural">
+                    <span class="sound-emoji">🎧</span>
+                    <span>Focus Binaural</span>
+                </div>
+                <div class="sound-option" onclick="selectSound('off')" data-sound="off">
+                    <span class="sound-emoji">🔇</span>
+                    <span>Silence</span>
+                </div>
+                <div class="volume-control">
+                    <div class="volume-label">
+                        <span>🔊</span>
+                        <span>Volume</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider" oninput="adjustVolume(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <h1 class="title">Indigo Soul Companion</h1>
+
+        <div class="mode-buttons">
+            <button class="mode-btn active" onclick="setMode('inspiration')">Inspiration</button>
+            <button class="mode-btn" onclick="setMode('focus')">Focus</button>
+            <button class="mode-btn" onclick="setMode('grounding')">Grounding</button>
+            <button class="mode-btn" onclick="setMode('companion')">AI Companion</button>
+            <button class="mode-btn" onclick="setMode('insights')">Soul Mirror</button>
+        </div>
+
+        <button class="main-button" onclick="revealInsight()">Reveal Today's Insight</button>
+
+        <div class="insight" id="insight"></div>
+
+        <!-- Companion Chat Interface -->
+        <div class="companion-section" id="companionSection" style="display: none;">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Tell me how you're feeling..." class="chat-input">
+                    <button onclick="sendMessage()" class="send-btn">Send</button>
+                </div>
+            </div>
+            <div class="companion-actions">
+                <button class="action-btn" onclick="startAssessment()">Quick Check-in</button>
+                <button class="action-btn" onclick="getAffirmation()">Need Encouragement</button>
+                <button class="action-btn" onclick="getWellnessPractice()">Wellness Practice</button>
+            </div>
+        </div>
+
+        <!-- Soul Mirror Insight Engine -->
+        <div class="insights-section" id="insightsSection" style="display: none;">
+            <div class="journal-container">
+                <textarea id="journalInput" class="journal-input" placeholder="Share your thoughts, feelings, or experiences... Let your soul speak freely." rows="4"></textarea>
+                <button onclick="generateInsight()" class="insight-btn" id="insightBtn">
+                    <span id="insightBtnText">✨ Generate Insight</span>
+                </button>
+            </div>
+            <div class="mirror-panel" id="mirrorPanel">
+                <div class="mirror-content" id="mirrorContent">
+                    <div class="welcome-message">
+                        <p>🪞 Welcome to your Soul Mirror</p>
+                        <p>Share your thoughts above and receive poetic insights that honor your neurodivergent journey.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mood-section" id="moodSection">
+            <button class="mood-button" onclick="toggleMoodOptions()">How are you feeling?</button>
+
+            <div class="mood-options" id="moodOptions">
+                <button class="emoji-btn" onclick="selectMood('drained')" title="Feeling drained">🌧</button>
+                <button class="emoji-btn" onclick="selectMood('okay')" title="Feeling okay">🌤</button>
+                <button class="emoji-btn" onclick="selectMood('bright')" title="Feeling bright">🌞</button>
+            </div>
+
+            <div class="mood-message" id="moodMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'inspiration';
+        let audioEnabled = false;
+        let companionCore = null;
+        let currentAssessment = null;
+        let currentSound = null;
+        let audioContext = null;
+        let currentAudioSource = null;
+        let gainNode = null;
+
+        const insights = {
+            inspiration: [
+                "You are the starlight remembering itself.",
+                "Your dreams are tomorrow's blueprints.",
+                "You carry galaxies in your soul.",
+                "The universe whispers through your intuition.",
+                "You are already walking the quantum bridge."
+            ],
+            focus: [
+                "One breath, one moment, one gentle step forward.",
+                "Your attention is a sacred gift you give yourself.",
+                "In this moment, everything you need is here.",
+                "Focus flows like water finding its path.",
+                "Each task is a meditation in disguise."
+            ],
+            grounding: [
+                "Your feet know the earth, your heart knows peace.",
+                "Stillness is also a revolution.",
+                "You are held by forces older than worry.",
+                "Every breath anchors you to now.",
+                "The ground beneath you is solid and true."
+            ]
+        };
+
+        const moodMessages = {
+            drained: "It's okay to feel tired. Rest is not giving up—it's recharging your beautiful energy. You're doing more than enough.",
+            okay: "Steady and present, you're exactly where you need to be. Sometimes 'okay' is the perfect place to start from.",
+            bright: "Your light is contagious! Let this energy ripple out into the world. You're a gift to everyone around you."
+        };
+
+        function setMode(mode) {
+            currentMode = mode;
+
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide appropriate sections
+            const companionSection = document.getElementById('companionSection');
+            const insightsSection = document.getElementById('insightsSection');
+            const moodSection = document.getElementById('moodSection');
+            const insightElement = document.getElementById('insight');
+
+            if (mode === 'companion') {
+                companionSection.style.display = 'block';
+                insightsSection.style.display = 'none';
+                moodSection.style.display = 'none';
+                insightElement.style.display = 'none';
+                initializeCompanion();
+            } else if (mode === 'insights') {
+                companionSection.style.display = 'none';
+                insightsSection.style.display = 'block';
+                moodSection.style.display = 'none';
+                insightElement.style.display = 'none';
+                initializeInsightEngine();
+            } else {
+                companionSection.style.display = 'none';
+                insightsSection.style.display = 'none';
+                moodSection.style.display = 'block';
+                insightElement.style.display = 'flex';
+                // Clear current insight
+                insightElement.classList.remove('show');
+            }
+        }
+
+        function revealInsight() {
+            const insightElement = document.getElementById('insight');
+            const modeInsights = insights[currentMode];
+            const randomIndex = Math.floor(Math.random() * modeInsights.length);
+            const selectedInsight = modeInsights[randomIndex];
+
+            // Fade out first
+            insightElement.classList.remove('show');
+
+            // Change text and fade in after a brief delay
+            setTimeout(() => {
+                insightElement.textContent = selectedInsight;
+                insightElement.classList.add('show');
+            }, 200);
+        }
+
+        function toggleMoodOptions() {
+            const moodOptions = document.getElementById('moodOptions');
+            const moodMessage = document.getElementById('moodMessage');
+
+            if (moodOptions.classList.contains('show')) {
+                moodOptions.classList.remove('show');
+                moodMessage.classList.remove('show');
+            } else {
+                moodOptions.classList.add('show');
+            }
+        }
+
+        function selectMood(mood) {
+            const moodMessage = document.getElementById('moodMessage');
+            const message = moodMessages[mood];
+
+            // Fade out first
+            moodMessage.classList.remove('show');
+
+            // Change text and fade in
+            setTimeout(() => {
+                moodMessage.textContent = message;
+                moodMessage.classList.add('show');
+            }, 200);
+        }
+
+        // Ambient Sound System - 3 High-Quality Options
+        const soundLibrary = {
+            ocean: {
+                name: 'Ocean Waves',
+                emoji: '🌊',
+                description: 'Gentle rhythmic waves for deep relaxation',
+                generate: () => generateOceanSound()
+            },
+            meditation: {
+                name: 'Meditation Track',
+                emoji: '🧘',
+                description: 'Soothing meditation soundscape with soft tones',
+                generate: () => generateMeditationTrack()
+            },
+            binaural: {
+                name: 'Focus Binaural',
+                emoji: '🎧',
+                description: 'Gentle binaural beats for enhanced focus',
+                generate: () => generateBinauralBeats()
+            }
+        };
+
+        function initializeAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                gainNode = audioContext.createGain();
+                gainNode.connect(audioContext.destination);
+                gainNode.gain.value = 0.5; // 50% volume
+            }
+        }
+
+        function toggleSoundMenu() {
+            const soundMenu = document.getElementById('soundMenu');
+            soundMenu.classList.toggle('show');
+            
+            // Close menu when clicking outside
+            if (soundMenu.classList.contains('show')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeMenuOnClickOutside);
+                }, 100);
+            }
+        }
+
+        function closeMenuOnClickOutside(event) {
+            const soundMenu = document.getElementById('soundMenu');
+            const audioControls = document.querySelector('.audio-controls');
+            
+            if (!audioControls.contains(event.target)) {
+                soundMenu.classList.remove('show');
+                document.removeEventListener('click', closeMenuOnClickOutside);
+            }
+        }
+
+        function selectSound(soundType) {
+            // Update UI
+            document.querySelectorAll('.sound-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            if (soundType !== 'off') {
+                document.querySelector(`[data-sound="${soundType}"]`).classList.add('active');
+            }
+
+            // Stop current sound
+            if (currentAudioSource) {
+                currentAudioSource.stop();
+                currentAudioSource = null;
+            }
+
+            // Start new sound
+            if (soundType !== 'off') {
+                initializeAudioContext();
+                currentSound = soundType;
+                playAmbientSound(soundType);
+                
+                // Update button state
+                const soundToggle = document.getElementById('soundToggle');
+                soundToggle.classList.add('active');
+                soundToggle.textContent = soundLibrary[soundType].emoji;
+            } else {
+                currentSound = null;
+                const soundToggle = document.getElementById('soundToggle');
+                soundToggle.classList.remove('active');
+                soundToggle.textContent = '🎵';
+            }
+
+            // Close menu
+            document.getElementById('soundMenu').classList.remove('show');
+        }
+
+        function adjustVolume(value) {
+            if (gainNode) {
+                gainNode.gain.value = value / 100;
+            }
+        }
+
+        function playAmbientSound(soundType) {
+            if (soundLibrary[soundType]) {
+                soundLibrary[soundType].generate();
+            }
+        }
+
+        // Improved Sound Generation Functions - 3 High-Quality Options
+        function generateOceanSound() {
+            const bufferSize = audioContext.sampleRate * 8; // 8 seconds for longer, more natural waves
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            // Generate realistic ocean wave sounds with multiple layers
+            for (let i = 0; i < bufferSize; i++) {
+                const time = i / audioContext.sampleRate;
+                
+                // Main wave cycle (slow, deep waves)
+                const mainWave = Math.sin(time * Math.PI * 0.3) * 0.4;
+                
+                // Secondary wave pattern
+                const secondWave = Math.sin(time * Math.PI * 0.7) * 0.2;
+                
+                // Gentle foam/bubbling effect
+                const foam = (Math.random() * 2 - 1) * 0.03 * Math.abs(Math.sin(time * Math.PI * 2));
+                
+                // Combine all elements
+                data[i] = (mainWave + secondWave + foam) * 0.6;
+            }
+
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.loop = true;
+            
+            // Apply gentle low-pass filtering for warmth
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 600;
+            filter.Q.value = 0.5;
+            
+            source.connect(filter);
+            filter.connect(gainNode);
+            source.start();
+            
+            currentAudioSource = source;
+        }
+
+        function generateMeditationTrack() {
+            // Create multiple oscillators for a rich, layered meditation soundscape
+            const osc1 = audioContext.createOscillator();
+            const osc2 = audioContext.createOscillator();
+            const osc3 = audioContext.createOscillator();
+            
+            const gain1 = audioContext.createGain();
+            const gain2 = audioContext.createGain();
+            const gain3 = audioContext.createGain();
+            
+            const filter = audioContext.createBiquadFilter();
+            const reverb = audioContext.createConvolver();
+            
+            // Set up harmonic frequencies (based on 432Hz tuning for relaxation)
+            osc1.frequency.value = 108; // Deep fundamental
+            osc2.frequency.value = 216; // Octave
+            osc3.frequency.value = 324; // Perfect fifth
+            
+            // Use sine waves for pure, calming tones
+            osc1.type = 'sine';
+            osc2.type = 'sine';
+            osc3.type = 'sine';
+            
+            // Set gentle volumes
+            gain1.gain.value = 0.03;
+            gain2.gain.value = 0.02;
+            gain3.gain.value = 0.015;
+            
+            // Add subtle modulation for organic feel
+            const lfo = audioContext.createOscillator();
+            const lfoGain = audioContext.createGain();
+            lfo.frequency.value = 0.1; // Very slow modulation
+            lfoGain.gain.value = 2;
+            
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc1.frequency);
+            
+            // Set up filtering for warmth
+            filter.type = 'lowpass';
+            filter.frequency.value = 800;
+            filter.Q.value = 1;
+            
+            // Connect the audio graph
+            osc1.connect(gain1);
+            osc2.connect(gain2);
+            osc3.connect(gain3);
+            
+            gain1.connect(filter);
+            gain2.connect(filter);
+            gain3.connect(filter);
+            
+            filter.connect(gainNode);
+            
+            // Start all oscillators
+            osc1.start();
+            osc2.start();
+            osc3.start();
+            lfo.start();
+            
+            // Store all oscillators to stop them later
+            currentAudioSource = {
+                stop: () => {
+                    osc1.stop();
+                    osc2.stop();
+                    osc3.stop();
+                    lfo.stop();
+                }
+            };
+        }
+
+        function generateBinauralBeats() {
+            // Create gentle binaural beats optimized for focus and relaxation
+            const leftOsc = audioContext.createOscillator();
+            const rightOsc = audioContext.createOscillator();
+            const leftGain = audioContext.createGain();
+            const rightGain = audioContext.createGain();
+            const merger = audioContext.createChannelMerger(2);
+            const filter = audioContext.createBiquadFilter();
+
+            // Use 174Hz base frequency (known for pain relief and relaxation)
+            // with 8Hz difference for alpha waves (relaxed focus)
+            leftOsc.frequency.value = 174;
+            rightOsc.frequency.value = 182; // 8Hz difference for alpha waves
+            
+            // Use sine waves for pure tones
+            leftOsc.type = 'sine';
+            rightOsc.type = 'sine';
+            
+            // Set very gentle volumes
+            leftGain.gain.value = 0.025;
+            rightGain.gain.value = 0.025;
+            
+            // Add subtle filtering to soften the tones
+            filter.type = 'lowpass';
+            filter.frequency.value = 1000;
+            filter.Q.value = 0.5;
+
+            // Connect the stereo setup
+            leftOsc.connect(leftGain);
+            rightOsc.connect(rightGain);
+            leftGain.connect(merger, 0, 0);  // Left channel
+            rightGain.connect(merger, 0, 1); // Right channel
+            merger.connect(filter);
+            filter.connect(gainNode);
+
+            leftOsc.start();
+            rightOsc.start();
+            
+            // Store both oscillators to stop them later
+            currentAudioSource = {
+                stop: () => {
+                    leftOsc.stop();
+                    rightOsc.stop();
+                }
+            };
+        }
+
+        // Companion functionality
+        async function initializeCompanion() {
+            if (!companionCore) {
+                // Initialize companion (simplified for demo)
+                companionCore = {
+                    initialized: true
+                };
+                
+                addCompanionMessage("Hello! I'm your gentle AI companion. I'm here to support you through your ADHD journey with understanding and care. How are you feeling today?");
+            }
+        }
+
+        function addCompanionMessage(message, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'companion'}`;
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                Companion is typing...
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        async function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addCompanionMessage(message, true);
+            chatInput.value = '';
+
+            // Show typing indicator
+            addTypingIndicator();
+
+            try {
+                // Call AI API for response
+                const response = await getAIResponse(message);
+                removeTypingIndicator();
+                addCompanionMessage(response);
+            } catch (error) {
+                removeTypingIndicator();
+                addCompanionMessage("I'm having trouble connecting right now, but I'm still here with you. Your feelings are valid, and you're doing great. Would you like to try one of the quick actions below instead?");
+                console.error('AI API Error:', error);
+            }
+        }
+
+        async function getAIResponse(userMessage) {
+            // For now, let's use an intelligent response system that works in the browser
+            // Later we can integrate with your backend API
+            return generateIntelligentResponse(userMessage);
+        }
+
+        function generateIntelligentResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Analyze the message for emotional content and ADHD-specific themes
+            const emotions = {
+                tired: ['tired', 'exhausted', 'drained', 'worn out', 'fatigue', 'sleepy'],
+                overwhelmed: ['overwhelmed', 'stressed', 'anxious', 'panic', 'too much', 'can\'t handle'],
+                focus: ['focus', 'concentrate', 'distracted', 'attention', 'can\'t think', 'scattered'],
+                sad: ['sad', 'down', 'depressed', 'hopeless', 'crying', 'upset', 'hurt'],
+                frustrated: ['frustrated', 'angry', 'annoyed', 'irritated', 'mad', 'fed up'],
+                good: ['good', 'great', 'happy', 'better', 'amazing', 'wonderful', 'excited'],
+                confused: ['confused', 'lost', 'don\'t understand', 'unclear', 'mixed up'],
+                lonely: ['lonely', 'alone', 'isolated', 'nobody understands', 'by myself']
+            };
+
+            // Find the dominant emotion
+            let dominantEmotion = 'neutral';
+            let maxMatches = 0;
+            
+            for (const [emotion, keywords] of Object.entries(emotions)) {
+                const matches = keywords.filter(keyword => lowerMessage.includes(keyword)).length;
+                if (matches > maxMatches) {
+                    maxMatches = matches;
+                    dominantEmotion = emotion;
+                }
+            }
+
+            // Generate contextual responses based on the emotion and ADHD understanding
+            const responses = {
+                tired: [
+                    "I hear you're feeling really drained right now. That's so valid - ADHD brains work extra hard just to navigate a neurotypical world. Have you been able to rest today?",
+                    "Exhaustion is real when you're managing ADHD. Your brain is constantly processing so much more than others realize. It's okay to need more rest than other people.",
+                    "Being tired doesn't mean you're lazy - it means your neurodivergent brain has been working overtime. What would feel most restorative for you right now?"
+                ],
+                overwhelmed: [
+                    "Feeling overwhelmed is such a common ADHD experience. Your brain is trying to process everything at once, and that's exhausting. Let's break this down into smaller pieces.",
+                    "I can feel how much you're carrying right now. ADHD minds often feel everything more intensely. What's the one thing that feels most urgent to you?",
+                    "Overwhelm is your brain's way of saying 'this is too much at once.' That's not a failure - that's information. What would help you feel more grounded right now?"
+                ],
+                focus: [
+                    "Focus challenges are at the heart of ADHD, and you're not broken for struggling with this. Your brain just works differently. What usually helps you find your focus?",
+                    "Attention isn't a character flaw - it's a neurological difference. Some days are harder than others, and that's completely normal for ADHD brains.",
+                    "Your focus comes and goes like waves, and that's okay. ADHD attention can be scattered or hyperfocused. What kind of focus challenge are you having today?"
+                ],
+                sad: [
+                    "I'm sorry you're feeling down. ADHD often comes with big emotions, and sadness can feel overwhelming. Your feelings are completely valid.",
+                    "Sadness hits differently when you have ADHD - it can feel all-consuming. You're not alone in this, and these feelings will pass.",
+                    "It's okay to feel sad. ADHD brains often experience emotions more intensely. What's been weighing on your heart lately?"
+                ],
+                frustrated: [
+                    "Frustration is such a common ADHD experience. When things don't work the way your brain needs them to, it's natural to feel angry. What's been most frustrating today?",
+                    "I can hear the frustration in your words. ADHD can make simple things feel impossibly hard sometimes. That anger makes complete sense.",
+                    "Frustration often comes from trying to fit into systems that weren't designed for neurodivergent minds. Your feelings are so valid."
+                ],
+                good: [
+                    "I love hearing that you're feeling good! ADHD brains deserve to celebrate these moments. What's been working well for you?",
+                    "It's wonderful when things feel manageable. ADHD has its challenges, but it also brings unique strengths. What's bringing you joy today?",
+                    "Good days are precious with ADHD. I'm so glad you're having one. What's been helping you feel this way?"
+                ],
+                confused: [
+                    "Confusion is so common with ADHD - your brain processes information differently. It's okay not to have everything figured out right now.",
+                    "ADHD minds often need more time to process complex information. Being confused doesn't mean you're not smart - it means you're being thorough.",
+                    "It's okay to feel lost sometimes. ADHD brains work in unique ways, and clarity often comes in its own time."
+                ],
+                lonely: [
+                    "Feeling alone is so hard, especially when you have ADHD. Many people don't understand what it's like to have a neurodivergent mind. But you're not truly alone.",
+                    "Loneliness is common in the ADHD community because we often feel different. But that difference is also what makes you uniquely valuable.",
+                    "I hear how isolated you're feeling. ADHD can make social connections challenging, but you deserve understanding and connection."
+                ],
+                neutral: [
+                    "Thank you for sharing with me. Whatever you're experiencing right now is valid. How has your day been treating you?",
+                    "I'm here to listen and support you. ADHD brings unique challenges and strengths. What's on your mind today?",
+                    "Every ADHD journey is different, and yours matters. What would be most helpful for you right now?"
+                ]
+            };
+
+            // Select a random response from the appropriate category
+            const responseArray = responses[dominantEmotion] || responses.neutral;
+            const randomIndex = Math.floor(Math.random() * responseArray.length);
+            
+            return responseArray[randomIndex];
+        }
+
+        async function startAssessment() {
+            addCompanionMessage("Let's do a gentle check-in together. I'll ask you a few questions to understand how you're feeling right now.", false);
+            
+            setTimeout(() => {
+                addCompanionMessage("On a scale of 1-5, how would you rate your energy level right now? (1 being completely drained, 5 being very energized)", false);
+                // In a full implementation, this would start a structured assessment
+            }, 1000);
+        }
+
+        async function getAffirmation() {
+            const affirmations = [
+                "You're doing better than you think you are. Your neurodivergent brain is navigating a world not designed for it, and that takes incredible strength.",
+                "Your worth isn't measured by your productivity. You are valuable simply because you exist.",
+                "It's okay to have difficult days. They don't define you or diminish your progress.",
+                "Your ADHD brain sees patterns and connections others miss. That's a superpower, not a deficit.",
+                "Progress isn't always linear, and that's perfectly okay. Every small step forward matters.",
+                "You don't have to be perfect to be worthy of love, respect, and compassion - especially from yourself."
+            ];
+            
+            const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            addCompanionMessage(randomAffirmation, false);
+        }
+
+        async function getWellnessPractice() {
+            const practices = [
+                {
+                    title: "4-4-4-4 Box Breathing",
+                    description: "Let's try a simple breathing technique. Breathe in for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat 4 times. This helps calm your nervous system.",
+                    duration: "3 minutes"
+                },
+                {
+                    title: "5-4-3-2-1 Grounding",
+                    description: "Let's ground yourself in the present moment. Name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste.",
+                    duration: "5 minutes"
+                },
+                {
+                    title: "Gentle Energy Shake",
+                    description: "Stand up and gently shake your hands, then your arms, then let it move through your whole body. Shake for 30 seconds, pause and breathe, repeat 2-3 times.",
+                    duration: "3 minutes"
+                }
+            ];
+            
+            const randomPractice = practices[Math.floor(Math.random() * practices.length)];
+            
+            const practiceMessage = `Here's a gentle wellness practice for you:
+
+**${randomPractice.title}** (${randomPractice.duration})
+
+${randomPractice.description}
+
+Take your time with this, and remember - there's no wrong way to do it. Just be gentle with yourself.`;
+            
+            addCompanionMessage(practiceMessage, false);
+        }
+
+        // Handle Enter key in chat input
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        // Soul Mirror Insight Engine
+        let ollamaConnected = false;
+        let insightHistory = [];
+
+        async function initializeInsightEngine() {
+            await checkOllamaConnection();
+            loadInsightHistory();
+        }
+
+        async function checkOllamaConnection() {
+            try {
+                const response = await fetch('http://localhost:11434/api/tags', {
+                    method: 'GET',
+                    signal: AbortSignal.timeout(3000)
+                });
+                ollamaConnected = response.ok;
+            } catch (error) {
+                ollamaConnected = false;
+            }
+            updateConnectionStatus();
+        }
+
+        function updateConnectionStatus() {
+            const mirrorPanel = document.getElementById('mirrorPanel');
+            let statusDiv = mirrorPanel.querySelector('.connection-status');
+            
+            if (!statusDiv) {
+                statusDiv = document.createElement('div');
+                statusDiv.className = 'connection-status';
+                mirrorPanel.insertBefore(statusDiv, mirrorPanel.firstChild);
+            }
+            
+            if (ollamaConnected) {
+                statusDiv.className = 'connection-status online';
+                statusDiv.textContent = '🟢 Ollama Connected - AI Insights Available';
+            } else {
+                statusDiv.className = 'connection-status offline';
+                statusDiv.textContent = '🟡 Ollama Offline - Using Fallback Insights';
+            }
+        }
+
+        async function generateInsight() {
+            const journalInput = document.getElementById('journalInput');
+            const insightBtn = document.getElementById('insightBtn');
+            const insightBtnText = document.getElementById('insightBtnText');
+            const mirrorContent = document.getElementById('mirrorContent');
+            
+            const entry = journalInput.value.trim();
+            if (!entry) {
+                journalInput.focus();
+                return;
+            }
+
+            // Disable button and show loading
+            insightBtn.disabled = true;
+            insightBtnText.textContent = '✨ Generating Insight...';
+            
+            // Add loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading-insight';
+            loadingDiv.innerHTML = `
+                Your soul mirror is reflecting...
+                <div class="loading-dots">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            mirrorContent.appendChild(loadingDiv);
+
+            try {
+                let insightText;
+                if (ollamaConnected) {
+                    insightText = await generateOllamaInsight(entry);
+                } else {
+                    insightText = generateFallbackInsight(entry);
+                }
+
+                // Remove loading indicator
+                loadingDiv.remove();
+
+                // Create insight entry
+                const insightEntry = {
+                    id: Date.now(),
+                    timestamp: new Date(),
+                    entry: entry,
+                    insight: insightText,
+                    source: ollamaConnected ? 'ollama' : 'fallback'
+                };
+
+                // Add to history and display
+                insightHistory.unshift(insightEntry);
+                displayInsight(insightEntry);
+                saveInsightHistory();
+
+                // Clear input and reset button
+                journalInput.value = '';
+                
+            } catch (error) {
+                console.error('Error generating insight:', error);
+                loadingDiv.remove();
+                
+                // Show fallback insight on error
+                const fallbackText = generateFallbackInsight(entry);
+                const insightEntry = {
+                    id: Date.now(),
+                    timestamp: new Date(),
+                    entry: entry,
+                    insight: fallbackText,
+                    source: 'fallback'
+                };
+                
+                insightHistory.unshift(insightEntry);
+                displayInsight(insightEntry);
+                saveInsightHistory();
+                journalInput.value = '';
+            }
+
+            // Reset button
+            insightBtn.disabled = false;
+            insightBtnText.textContent = '✨ Generate Insight';
+        }
+
+        async function generateOllamaInsight(entry) {
+            const prompt = `You are a wise, poetic soul mirror for neurodivergent minds. Transform this journal entry into a beautiful, validating insight that:
+
+- Uses metaphorical and poetic language
+- Validates neurodivergent experiences without pathologizing
+- Celebrates unique perspectives and strengths
+- Offers gentle wisdom and perspective
+- Keeps responses to 2-3 sentences maximum
+- Avoids clinical language or direct advice
+- Embraces the beauty of different minds
+
+Journal Entry: "${entry}"
+
+Respond as a gentle, understanding mirror that reflects back beauty and wisdom:`;
+
+            const response = await fetch('http://localhost:11434/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: 'gemma:latest',
+                    prompt: prompt,
+                    stream: false,
+                    options: {
+                        temperature: 0.8,
+                        top_p: 0.9,
+                        max_tokens: 150
+                    }
+                }),
+                signal: AbortSignal.timeout(30000)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ollama API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.response.trim();
+        }
+
+        function generateFallbackInsight(entry) {
+            const lowerEntry = entry.toLowerCase();
+            
+            // Analyze entry for emotional themes
+            const themes = {
+                struggle: ['hard', 'difficult', 'struggle', 'can\'t', 'impossible', 'overwhelming'],
+                growth: ['learning', 'growing', 'better', 'progress', 'trying', 'working'],
+                tired: ['tired', 'exhausted', 'drained', 'worn out'],
+                creative: ['create', 'art', 'music', 'write', 'imagine', 'dream'],
+                different: ['different', 'weird', 'strange', 'unique', 'odd'],
+                connection: ['lonely', 'alone', 'friends', 'family', 'understand']
+            };
+
+            let dominantTheme = 'general';
+            let maxMatches = 0;
+            
+            for (const [theme, keywords] of Object.entries(themes)) {
+                const matches = keywords.filter(keyword => lowerEntry.includes(keyword)).length;
+                if (matches > maxMatches) {
+                    maxMatches = matches;
+                    dominantTheme = theme;
+                }
+            }
+
+            const insights = {
+                struggle: [
+                    "Your struggles are not weaknesses—they are the universe teaching you to bend without breaking, like a tree that grows stronger in the storm.",
+                    "In the garden of your mind, even the thorns serve a purpose. What feels difficult now is composting into wisdom.",
+                    "You are not broken; you are a masterpiece painted with different brushstrokes than the world expects."
+                ],
+                growth: [
+                    "Like a butterfly emerging from its chrysalis, your growth happens in the darkness before the world sees your wings.",
+                    "Every step forward, no matter how small, is your soul choosing courage over comfort. You are becoming.",
+                    "Your journey is not linear—it spirals upward like a galaxy, each revolution bringing you closer to your truth."
+                ],
+                tired: [
+                    "Rest is not surrender; it is your spirit gathering starlight for the next chapter of your story.",
+                    "Your tiredness speaks of a heart that has been brave, a mind that has been working. Honor this sacred exhaustion.",
+                    "Even the moon takes time to wane before it waxes full again. Your energy follows ancient rhythms."
+                ],
+                creative: [
+                    "Your creativity is not a hobby—it is your soul speaking its native language to a world that needs your unique voice.",
+                    "In your imagination lives a universe that only you can birth. You are both the artist and the art.",
+                    "Every creative act is a small rebellion against a world that tries to make everyone the same."
+                ],
+                different: [
+                    "Your differences are not flaws in the design—they are features that make you irreplaceable in the cosmic code.",
+                    "The world needs your particular shade of light. What makes you different makes you necessary.",
+                    "You are not meant to fit into boxes that were built for other shapes. You are meant to create new geometries."
+                ],
+                connection: [
+                    "Your loneliness is not evidence of your unworthiness—it is proof of your deep capacity for connection.",
+                    "Somewhere in this vast universe, there are souls who speak your language. Your tribe is finding you too.",
+                    "You belong to the constellation of sensitive hearts who feel everything deeply. This is your superpower."
+                ],
+                general: [
+                    "Your thoughts are valid, your feelings are real, and your experience matters in ways you may not yet understand.",
+                    "You are writing a story that has never been told before. Every page matters, even the difficult chapters.",
+                    "In the symphony of existence, your note is irreplaceable. The music would be incomplete without you."
+                ]
+            };
+
+            const themeInsights = insights[dominantTheme] || insights.general;
+            return themeInsights[Math.floor(Math.random() * themeInsights.length)];
+        }
+
+        function displayInsight(insightEntry) {
+            const mirrorContent = document.getElementById('mirrorContent');
+            
+            // Remove welcome message if it exists
+            const welcomeMessage = mirrorContent.querySelector('.welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.remove();
+            }
+
+            const insightDiv = document.createElement('div');
+            insightDiv.className = 'insight-entry';
+            insightDiv.innerHTML = `
+                <div class="insight-timestamp">${insightEntry.timestamp.toLocaleString()}</div>
+                <div class="insight-text">${insightEntry.insight}</div>
+                <div class="insight-source">✨ ${insightEntry.source === 'ollama' ? 'AI Generated' : 'Soul Wisdom'}</div>
+            `;
+            
+            mirrorContent.insertBefore(insightDiv, mirrorContent.firstChild);
+        }
+
+        function loadInsightHistory() {
+            try {
+                const saved = localStorage.getItem('soulMirrorInsights');
+                if (saved) {
+                    insightHistory = JSON.parse(saved).map(entry => ({
+                        ...entry,
+                        timestamp: new Date(entry.timestamp)
+                    }));
+                    
+                    // Display recent insights
+                    const mirrorContent = document.getElementById('mirrorContent');
+                    const welcomeMessage = mirrorContent.querySelector('.welcome-message');
+                    
+                    if (insightHistory.length > 0 && welcomeMessage) {
+                        welcomeMessage.remove();
+                        insightHistory.slice(0, 5).forEach(entry => displayInsight(entry));
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading insight history:', error);
+            }
+        }
+
+        function saveInsightHistory() {
+            try {
+                // Keep only last 50 insights
+                const toSave = insightHistory.slice(0, 50);
+                localStorage.setItem('soulMirrorInsights', JSON.stringify(toSave));
+            } catch (error) {
+                console.error('Error saving insight history:', error);
+            }
+        }
+
+        // Handle Enter key in journal input
+        document.addEventListener('DOMContentLoaded', function() {
+            const journalInput = document.getElementById('journalInput');
+            if (journalInput) {
+                journalInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                        generateInsight();
+                    }
+                });
+            }
+        });
+
+        // Initialize with a gentle welcome
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                revealInsight();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
