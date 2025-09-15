@@ -1,0 +1,25 @@
+body {
+  font-family: "Georgia", serif;
+  background: linear-gradient(to right, #2c3e50, #4ca1af);
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+textarea {
+  width: 60%;
+  height: 100px;
+  margin-bottom: 1rem;
+}
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  cursor: pointer;
+}
+#response {
+  margin-top: 2rem;
+  font-style: italic;
+  white-space: pre-wrap;
+}
